@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Advent of Code Day 10 Solution in Canvas</title>
+  </head>
+  <body>
+    <h1 id="second"></h1>
+    <canvas id="solution-canvas" width="300" height="300"></canvas>
+
+    <script src="./input_10.js"></script>
+    <script src="./output_10.js"></script>
+
+    <script>
+      function draw(context, points, pixel, second) {
+        document.getElementById('second').innerHTML = second;
+        for (let i in points) {
+          context.putImageData(pixel, points[i].x, points[i].y);
+        }
+      }
+    </script>
+
+    <script>
+      let second = 10933;
+      const context = document.getElementById('solution-canvas').getContext('2d');
+      const pixelBlack = context.createImageData(1, 1);
+      for (let i = 0; i < 3; ++i)
+        pixelBlack.data[i] = 0;
+      pixelBlack.data[3] = 255; //alpha channel
+
+      const pixelWhite = context.createImageData(1, 1);
+      for (let i = 0; i < 4; ++i)
+        pixelWhite.data[i] = 255;
+
+      draw(context, output, pixelBlack, second);
+
+      window.addEventListener('keydown', function (event) {
+        console.log(event);
+        if (event.key === 'a') {
+          draw(context, output, pixelWhite, second);
+          --second;
+          for (let i = 0; i < output.length; ++i) {
+            output[i].x -= input.velocities[i].x;
+            output[i].y -= input.velocities[i].y;
+          }
+          draw(context, output, pixelBlack, second);
+        }
+        if (event.key === 'd') {
+          draw(context, output, pixelWhite, second);
+          ++second;
+          for (let i = 0; i < output.length; ++i) {
+            output[i].x += input.velocities[i].x;
+            output[i].y += input.velocities[i].y;
+          }
+          draw(context, output, pixelBlack, second);
+        }
+      });
+    </script>
+  </body>
+</html>
